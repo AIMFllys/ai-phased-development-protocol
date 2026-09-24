@@ -1,0 +1,11 @@
+html, body { margin: 0; background: #000; overflow: hidden; }
+#stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #F2E8D6; transform-origin: 0 0; }
+#stage > * { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+#paper { overflow: hidden; }
+#ui { pointer-events: none; font-family: 'Space Grotesk', 'Noto Sans SC', sans-serif; }
+#fx { pointer-events: none; }
+#ui .el { position: absolute; white-space: pre; }
+#controls { position: fixed; left: 0; right: 0; bottom: 0; display: flex; gap: 12px; align-items: center; padding: 10px 16px; background: rgba(0,0,0,.7); color: #fff; font: 14px 'JetBrains Mono', monospace; }
+#controls input { flex: 1; }
+#controls button { font-size: 18px; width: 44px; }
+#controls[hidden] { display: none; }
