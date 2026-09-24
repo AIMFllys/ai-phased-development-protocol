@@ -27,13 +27,14 @@ const args = Object.fromEntries(process.argv.slice(2).reduce((acc, a, i, all) =>
 const FPS = Number(args.fps || 60);
 const DURATION = 30;
 const W = 1920, H = 1080;
-const WORKERS = Number(args.workers || Math.max(1, Math.min(4, os.cpus().length)));
+const WORKERS = Number(args.workers || 2);
+const DSF = Number(args.scale || 1); // 0.5 = fast 960x540 preview
 
 async function openPage(browser, port) {
-  const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
+  const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: DSF });
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') console.log('[page]', m.text()); });
   page.on('pageerror', (e) => console.log('[pageerror]', e.message));
-  await page.goto(`http://127.0.0.1:${port}/src/index.html?render=1`);
+  await page.goto(`http://127.0.0.1:${port}/src/index.html?render=1&scale=${DSF}`);
   await page.waitForFunction(() => window.__ready === true, null, { timeout: 120000 });
   page.cdp = await page.context().newCDPSession(page);
   return page;

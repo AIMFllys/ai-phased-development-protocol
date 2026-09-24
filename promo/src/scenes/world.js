@@ -105,8 +105,9 @@ export class World {
   async init(faces) {
     await Promise.all(faces.map((f) => document.fonts.load(f, '搭建表单组件校验输入对接登录接口保存会话通过需求分析架构设计任务拆解编码执行审查收尾 0123456789 GATE STEP ✓')));
     const r = this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: false, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+    const S = this.S = Number(new URLSearchParams(location.search).get('scale') || 1);
     r.setPixelRatio(1);
-    r.setSize(1920, 1080, false);
+    r.setSize(1920 * S, 1080 * S, false);
     r.shadowMap.enabled = true;
     r.shadowMap.type = THREE.PCFSoftShadowMap;
     r.outputColorSpace = THREE.SRGBColorSpace;
@@ -117,12 +118,12 @@ export class World {
     scene.environment = this.env;
     this.cam = new THREE.PerspectiveCamera(30, 1920 / 1080, 1, 100000);
 
-    const rt = new THREE.WebGLRenderTarget(1920, 1080, { type: THREE.HalfFloatType, samples: 4 });
+    const rt = new THREE.WebGLRenderTarget(1920 * S, 1080 * S, { type: THREE.HalfFloatType, samples: 4 });
     const comp = this.composer = new EffectComposer(r, rt);
     comp.setPixelRatio(1);
-    comp.setSize(1920, 1080);
+    comp.setSize(1920 * S, 1080 * S);
     comp.addPass(new RenderPass(scene, this.cam));
-    this.bloom = new UnrealBloomPass(new THREE.Vector2(960, 540), 0, 0.55, 0.82);
+    this.bloom = new UnrealBloomPass(new THREE.Vector2(960 * S, 540 * S), 0, 0.55, 0.82);
     comp.addPass(this.bloom);
     this.final = new ShaderPass(FinalShader);
     comp.addPass(this.final);
