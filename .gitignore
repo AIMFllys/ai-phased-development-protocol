@@ -18,6 +18,5 @@ node_modules/
 
 # promo video build
 promo/node_modules/
-promo/out/segments/
-promo/out/stills/
+promo/out/
 promo/audio/score.wav
