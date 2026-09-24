@@ -2,7 +2,7 @@
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
 const require = createRequire(import.meta.url);
-const { chromium } = require('/opt/node22/lib/node_modules/playwright');
+const { chromium } = (() => { try { return require('playwright'); } catch { return require('/opt/node22/lib/node_modules/playwright'); } })();
 import { startServer } from './serve.mjs';
 const [t, out, code] = process.argv.slice(2);
 const server = await startServer(); const port = server.address().port;

@@ -13,11 +13,18 @@ import { fileURLToPath } from 'node:url';
 import { startServer } from './serve.mjs';
 
 const require = createRequire(import.meta.url);
-const { chromium } = require('/opt/node22/lib/node_modules/playwright');
+// Prefer the project's playwright; fall back to a global install (cloud container).
+const { chromium } = (() => { try { return require('playwright'); } catch { return require('/opt/node22/lib/node_modules/playwright'); } })();
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'out');
-const FFMPEG = execFileSync('python3', ['-c', 'import imageio_ffmpeg as f;print(f.get_ffmpeg_exe())']).toString().trim();
+// ffmpeg with libx264: $FFMPEG, else the one bundled by `pip install imageio-ffmpeg`, else ffmpeg on PATH.
+const FFMPEG = process.env.FFMPEG || (() => {
+  for (const py of ['python3', 'python']) {
+    try { return execFileSync(py, ['-c', 'import imageio_ffmpeg as f;print(f.get_ffmpeg_exe())']).toString().trim(); } catch { /* next */ }
+  }
+  return 'ffmpeg';
+})();
 
 const args = Object.fromEntries(process.argv.slice(2).reduce((acc, a, i, all) => {
   if (a.startsWith('--')) acc.push([a.slice(2), all[i + 1] && !all[i + 1].startsWith('--') ? all[i + 1] : true]);
@@ -54,8 +61,11 @@ async function shot(page, t, opts = {}) {
   return Buffer.from(prev, 'base64');
 }
 
+// --gpu: use the local graphics card (much faster). Default: SwiftShader, works anywhere.
+const GL_FLAGS = args.gpu ? ['--ignore-gpu-blocklist', '--enable-gpu-rasterization'] : ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'];
 const launch = () => chromium.launch({
-  args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist',
+  headless: true,
+  args: [...GL_FLAGS,
     '--disable-web-security', '--run-all-compositor-stages-before-draw', '--disable-checker-imaging', '--font-render-hinting=none', '--force-color-profile=srgb'],
 });
 

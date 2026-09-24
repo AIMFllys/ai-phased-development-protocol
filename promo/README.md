@@ -21,14 +21,18 @@
 
 ## 使用
 
+需要 Node 18+ 和 Python 3。
+
 ```bash
 cd promo
 npm install
+npx playwright install chromium            # 下载渲染用的浏览器
 pip install numpy scipy imageio-ffmpeg     # 配乐合成 + 带 libx264 的 ffmpeg
 
 npm run music                              # 生成 audio/score.wav
 npm run preview                            # 浏览器打开 http://127.0.0.1:8080/src/index.html，可拖动时间轴、播放
-npm run render                             # 渲染成片 -> out/promo.mp4
+npm run render                             # 渲染成片 -> out/promo.mp4（软件渲染，任何机器都能跑，较慢）
+npm run render:gpu                         # 用本机显卡渲染，快很多（推荐在自己电脑上用）
 node render/render.mjs --from 10 --to 18   # 只渲染一段
 node render/render.mjs --stills 3,9.5,17   # 导出静帧 -> out/stills/
 ```
