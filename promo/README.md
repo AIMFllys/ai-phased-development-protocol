@@ -2,7 +2,7 @@
 
 30 秒 / 1920×1080 / 60fps。从手绘到写实的「升维」宣传片：一道 Gate 贯穿全片，每确认一次，画面就升一个维度。
 
-制作方法、节奏与卡点的把控、踩过的坑，见 [MAKING-OF.md](MAKING-OF.md)。
+制作方法、节奏与卡点的把控、踩过的坑，见 [MAKING-OF.md](MAKING-OF.md)；完整复盘（参数、35 条踩坑、可复用模板）见 [Phase-Gate升维宣传片代码视频-CoExp.md](Phase-Gate升维宣传片代码视频-CoExp.md)。
 
 ## 分镜（120 BPM，1 拍 = 0.5s）
 
